@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.github.taiz_daily_sitrep.twa",
+        "sha256_cert_fingerprints": ["BC:31:F6:5D:03:DF:50:1F:F2:47:FD:E9:DF:B3:0B:F4:E6:12:0E:AF:62:81:E3:E5:CF:A9:2C:8A:9E:34:85:06"]
+      }
+    }]
