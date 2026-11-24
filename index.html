@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>الموقف اليومي - تعز</title>
+<meta name="theme-color" content="#13233F">
+<meta name="description" content="الموقف اليومي لمحافظة تعز، الغرفة الإعلامية الموحدة">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+html,body{margin:0;height:100%;background:#fff;overflow:hidden}
+iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#fff}
+#ld{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;color:#13233F;background:#fff;font-family:system-ui,sans-serif;transition:opacity .4s}
+#ld img{width:170px;height:auto}
+#ld.off{opacity:0;pointer-events:none}
+</style>
+</head>
+<body>
+<div id="ld"><img src="splash-logo.png" alt=""><div>جار فتح الموقف اليومي...</div></div>
+<iframe id="app" title="الموقف اليومي - تعز" allow="clipboard-write" src="https://script.google.com/macros/s/AKfycbwmVltxupKFdTN41or4Y_ZwQpZ3eG_a1Osj9KaAXbAcRm7gtcgncx1-BbSesR06QFXi0Q/exec"></iframe>
+<script>
+document.getElementById('app').addEventListener('load',function(){document.getElementById('ld').className='off';});
+setTimeout(function(){document.getElementById('ld').className='off';},15000);
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}
+</script>
+</body>
+</html>
