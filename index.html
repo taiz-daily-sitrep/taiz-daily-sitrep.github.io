@@ -24,6 +24,23 @@ iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#fff}
 document.getElementById('app').addEventListener('load',function(){document.getElementById('ld').className='off';});
 setTimeout(function(){document.getElementById('ld').className='off';},15000);
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}
+(function(){
+var K='mq_bio';
+function b64(u){return btoa(String.fromCharCode.apply(null,new Uint8Array(u))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
+function unb(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';var b=atob(s),a=new Uint8Array(b.length);for(var i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a;}
+function rnd(n){var a=new Uint8Array(n);crypto.getRandomValues(a);return a;}
+function st(){try{return JSON.parse(localStorage.getItem(K)||'null');}catch(e){return null;}}
+function cap(){try{return window.PublicKeyCredential&&PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable?PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable().catch(function(){return false;}):Promise.resolve(false);}catch(e){return Promise.resolve(false);}}
+window.addEventListener('message',function(e){
+ var m=e.data||{},h='';try{h=new URL(e.origin).hostname;}catch(x){}
+ if(m.mq!==1||!/\.googleusercontent\.com$/.test(h))return;
+ var src=e.source,o=e.origin;function rep(x){x.mq=2;try{src.postMessage(x,o);}catch(y){}}
+ if(m.t==='hello'){cap().then(function(ok){rep({t:'cap',bio:!!ok,has:!!(ok&&st())});});}
+ else if(m.t==='enroll'){navigator.credentials.create({publicKey:{rp:{name:'الموقف اليومي - تعز'},user:{id:rnd(16),name:String(m.role||'user'),displayName:'الموقف اليومي'},challenge:rnd(32),pubKeyCredParams:[{type:'public-key',alg:-7},{type:'public-key',alg:-257}],authenticatorSelection:{authenticatorAttachment:'platform',userVerification:'required',residentKey:'discouraged'},timeout:60000,attestation:'none'}}).then(function(c){localStorage.setItem(K,JSON.stringify({id:b64(c.rawId),k:m.key}));rep({t:'enrolled',ok:true});}).catch(function(){rep({t:'enrolled',ok:false,key:m.key});});}
+ else if(m.t==='get'){var s=st();if(!s)return;navigator.credentials.get({publicKey:{challenge:rnd(32),allowCredentials:[{type:'public-key',id:unb(s.id)}],userVerification:'required',timeout:60000}}).then(function(){rep({t:'key',key:s.k});}).catch(function(){rep({t:'fail'});});}
+ else if(m.t==='forget'){var s2=st();try{localStorage.removeItem(K);}catch(x){}if(s2)rep({t:'forgot',key:s2.k});}
+});
+})();
 </script>
 </body>
 </html>
